@@ -1,10 +1,12 @@
 package controller.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-import org.controlsfx.dialog.Dialogs;
+
 
 import controller.model.*;
 
@@ -127,12 +129,12 @@ public class ProductEditDialogController {
         if (errorMessage.length() == 0) {
             return true;
         } else {
-            // Show the error message.
-            Dialogs.create()
-                .title("Invalid Fields")
-                .masthead("Please correct invalid fields")
-                .message(errorMessage)
-                .showError();
+        	// Nothing selected.
+        	Alert alert = new Alert(AlertType.WARNING);
+        	alert.setTitle("Sin seleccion");
+        	alert.setHeaderText(null);
+        	alert.setContentText("invalid");
+        	alert.showAndWait();
             return false;
         }
     }

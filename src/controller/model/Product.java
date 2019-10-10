@@ -42,7 +42,10 @@ public class Product {
 	}
 
 	
-
+/**
+ * Setter and getters of name
+ * @return name
+ */
 	public String getName() {
         return name.get();
     }
@@ -55,31 +58,43 @@ public class Product {
         return name;
     }
      
-    
+    /**
+     * Setter and getters of quantity
+     * @return quantity
+     */
     
     public int getQuantity() {
         return quantity.get();
     }
 
     public void setQuantity(int quantity) {
-        this.quantity.set(quantity);
+        this.quantity.set(quantity-this.getQuantitySell());
     }
     
     public IntegerProperty quantityProperty() {
         return quantity;
     }
     
+    /**
+     * Setter and getters of quantitySell
+     * @return quantitySell
+     */
     public int getQuantitySell() {
         return quantitySell.get();
     }
 
     public void setQuantitySell(int quantitySell) {
-        this.quantitySell.set(quantitySell);
+        this.quantitySell.set(this.getQuantitySell()+quantitySell);
     }
     
     public IntegerProperty quantitySellProperty() {
         return quantitySell;
     }
+    
+    /**
+     * Setter and getters of value
+     * @return value
+     */ 
     
     public Float getValue() {
         return value.get();
@@ -92,7 +107,10 @@ public class Product {
     public FloatProperty valueProperty() {
         return value;
     }
-    
+    /**
+     * Setter and getters of category
+     * @return category
+     */
     public String getCategory() {
         return category.get();
     }

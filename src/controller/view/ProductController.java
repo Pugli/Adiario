@@ -147,11 +147,12 @@ public class ProductController {
 
         } else {
             // Nothing selected.
-            Dialogs.create()
-                .title("No Selection")
-                .masthead("No Person Selected")
-                .message("Please select a person in the table.")
-                .showWarning();
+        	// Nothing selected.
+        	Alert alert = new Alert(AlertType.WARNING);
+        	alert.setTitle("Sin seleccion");
+        	alert.setHeaderText(null);
+        	alert.setContentText("Por favor, seleccione un producto de la tabla");
+        	alert.showAndWait();
         }
     }
     
@@ -162,19 +163,20 @@ public class ProductController {
     @FXML
     private void sell() {
         Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
-      /*  if (selectedProduct != null) {
-            boolean okClicked = mainApp.showProductEditDialog(selectedProduct);
+        if (selectedProduct != null) {
+            boolean okClicked = mainApp.showProductSellDialog(selectedProduct);
             if (okClicked) {
              showProductDetails(selectedProduct);
            }
 
         } else {
             // Nothing selected.
-            Dialogs.create()
-                .title("No Selection")
-                .masthead("No Person Selected")
-                .message("Please select a person in the table.")
-                .showWarning();
-        }*/
+        	// Nothing selected.
+        	Alert alert = new Alert(AlertType.WARNING);
+        	alert.setTitle("Sin seleccion");
+        	alert.setHeaderText(null);
+        	alert.setContentText("invalid");
+        	alert.showAndWait();
+        }
     }
 }
