@@ -6,7 +6,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import org.controlsfx.dialog.Dialogs;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.scene.control.TextField;
+
+//import org.controlsfx.dialog.Dialogs;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import controller.MainApp;
@@ -21,6 +27,9 @@ public class ProductController {
     private TableColumn<Product, String> categoryColumn;
 
     @FXML
+    private TextField filterField;
+    
+    @FXML
     private Label nameLabel;
     @FXML
     private Label categoryLabel;
@@ -33,6 +42,8 @@ public class ProductController {
    // @FXML
   //  private Label dateLabel;
 
+    private ObservableList<Product> masterData = FXCollections.observableArrayList();
+    
     // Reference to the main application.
     private MainApp mainApp;
 
@@ -58,7 +69,38 @@ public class ProductController {
     	
     	productTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showProductDetails(newValue));
+    	
+    	// 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Product> filteredData = new FilteredList<>(masterData, p -> true);
     
+     // 2. Set the filter Predicate whenever the filter changes.
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(product -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+                
+                if (product.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (product.getCategory().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+                return false; // Does not match.
+            });
+        });
+        
+        // 3. Wrap the FilteredList in a SortedList. 
+        SortedList<Product> sortedData = new SortedList<>(filteredData);
+        
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(productTable.comparatorProperty());
+        
+     // 5. Add sorted (and filtered) data to the table.
+        productTable.setItems(sortedData);
     }
 
     /**

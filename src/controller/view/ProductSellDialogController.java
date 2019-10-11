@@ -34,6 +34,10 @@ public class ProductSellDialogController {
         this.dialogStage = dialogStage;
     }
     
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
     @FXML
     private void handleOk() {
         if (isInputValid()) { 
@@ -44,6 +48,9 @@ public class ProductSellDialogController {
             dialogStage.close();
         }
     }
+    
+    
+    
     /**
      * Returns true if the user clicked OK, false otherwise.
      * 
