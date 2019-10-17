@@ -31,7 +31,7 @@ public class MainApp extends Application {
      */
     public MainApp() {
         // Add some sample data
-    	ProductData.add(new Product(1,"La capital",100,0,(float) 30,"Diario"));
+    	/*ProductData.add(new Product(1,"La capital",100,0,(float) 30,"Diario"));
     	ProductData.add(new Product(2,"las flores",30,0,(float) 100,"Revista"));
     	ProductData.add(new Product(3,"Batman vs Superman",10,0,(float) 500,"Comic"));
         ProductData.add(new Product(4,"Perritos y como educarlos",20,0,(float) 30,"Revista"));
@@ -39,7 +39,7 @@ public class MainApp extends Application {
         ProductData.add(new Product(6,"mi valijita",45,0,(float) 120,"Infantil"));
         ProductData.add(new Product(8,"argentina",55,0,(float) 70,"Revista"));
         ProductData.add(new Product(9,"Shazam",25,0,(float) 200,"Comic"));
-        ProductData.add(new Product(10,"One piece Ikea",4,0,(float) 450,"figuras"));
+        ProductData.add(new Product(10,"One piece Ikea",4,0,(float) 450,"figuras"));*/
     }
   
     /**
@@ -151,7 +151,7 @@ public class MainApp extends Application {
 
             // Create the dialog Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Editar producto");
+            dialogStage.setTitle("Nuevo producto");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -171,6 +171,8 @@ public class MainApp extends Application {
             return false;
         }
     }
+    
+    
     
     public boolean showProductSellDialog(Product product) {
         try {

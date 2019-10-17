@@ -15,7 +15,11 @@ import javafx.scene.input.KeyEvent;
 //import org.controlsfx.dialog.Dialogs;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+import java.util.ArrayList;
+
 import controller.MainApp;
+import controller.dao.DaoProduct;
 import controller.model.Product;
 import controller.util.DateUtil;
 
@@ -47,11 +51,14 @@ public class ProductController {
 
 	// Reference to the main application.
 	private MainApp mainApp;
+	
+	private DaoProduct DAOproduct;
 
 	/**
 	 * The constructor. The constructor is called before the initialize() method.
 	 */
 	public ProductController() {
+		this.DAOproduct= new DaoProduct();
 	}
 
 	/**
@@ -124,6 +131,12 @@ public class ProductController {
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	//agregar datos
+		ArrayList<Product> daoProduct;
+		daoProduct=DAOproduct.getAll();
+        for (Product n: daoProduct) {
+             mainApp.getProductData().add(n);
+        }
 
 		// Add observable list data to the table
 		productTable.setItems(mainApp.getProductData());

@@ -1,5 +1,7 @@
 package controller.util;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -25,6 +27,13 @@ public class DateUtil {
      * @param date the date to be returned as a string
      * @return formatted string
      */
+    
+    public static String formatDate(Date date) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    	String fCC = sdf.format(date);
+    	return fCC;
+    }
+    
     public static String format(LocalDate date) {
         if (date == null) {
             return null;

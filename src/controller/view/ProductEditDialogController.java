@@ -29,12 +29,12 @@ public class ProductEditDialogController {
     @FXML
     private TextField dateField;
 
-
+    private int id;
     private Stage dialogStage;
     private Product product;
     private boolean okClicked = false;
     
-    private DaoProduct DAOproduct;
+    private DaoProduct DAOproduct = new DaoProduct();
 
     /**
      * Initializes the controller class. This method is automatically called
@@ -60,7 +60,7 @@ public class ProductEditDialogController {
      */
     public void setProduct(Product product) {
         this.product = product;
-
+         this.id= product.getid();
         nameField.setText(product.getName());
         categoryField.setText(product.getCategory());
         quantityField.setText(Integer.toString(product.getQuantity()));
@@ -98,7 +98,10 @@ public class ProductEditDialogController {
     }
     
     private void save() {
-    	this.DAOproduct.insertar(product);
+    	if(this.DAOproduct.getXId(this.id)==null) {
+    		this.DAOproduct.insert(product);
+    	}
+    	this.DAOproduct.insert(product);
     }
 
     /**

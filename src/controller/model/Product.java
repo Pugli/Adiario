@@ -3,6 +3,7 @@ package controller.model;
 //import java.time.LocalDate;
 
 import javafx.beans.property.IntegerProperty;
+import controller.util.DateUtil;
 import javafx.beans.property.ObjectProperty;
 //import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -11,8 +12,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
+import controller.util.DateUtil;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 
@@ -36,14 +40,16 @@ public class Product {
 		this.date = new SimpleObjectProperty<LocalDate>(LocalDate.of(2019, 1, 1));
 	}
 
-	public Product(int id, String name, int quantity, int quantitySell, Float value, String category) {
+	public Product(int id, String name, int quantity, int quantitySell, Float value, String category,Date date) {
 		this.id = new SimpleIntegerProperty(id);
 		this.name = new SimpleStringProperty(name);
 		this.quantity = new SimpleIntegerProperty(quantity);
 		this.quantitySell = new SimpleIntegerProperty(quantitySell);
 		this.value = new SimpleFloatProperty(value);
 		this.category = new SimpleStringProperty(category);
-		this.date = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+		
+		this.date = new SimpleObjectProperty<LocalDate>(date.toLocalDate());
+		//date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 	}
 
 	/**
