@@ -32,6 +32,7 @@
                         <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="74.33334350585938" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="74.33334350585938" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="74.33334350585938" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="147.0" minHeight="10.0" prefHeight="74.33334350585938" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Nombre" />
@@ -44,9 +45,12 @@
                         <Label fx:id="quantityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="quantitySellLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="valuelLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="Fecha" GridPane.rowIndex="5" />
+                        <Label fx:id="dateLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <TextField fx:id="filterField" layoutX="84.0" layoutY="82.0" onKeyPressed="#filterAndSorting" />
+                  <Button layoutX="22.0" layoutY="18.0" minWidth="48.0" mnemonicParsing="false" text="Ventas" textAlignment="CENTER" AnchorPane.rightAnchor="161.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
         </items>

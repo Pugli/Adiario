@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import controller.MainApp;
 import controller.model.Product;
+import controller.util.DateUtil;
 
 public class ProductController {
 	@FXML
@@ -39,8 +40,8 @@ public class ProductController {
 	private Label quantitySellLabel;
 	@FXML
 	private Label valuelLabel;
-	// @FXML
-	// private Label dateLabel;
+	 @FXML
+     private Label dateLabel;
 
 	private ObservableList<Product> masterData = FXCollections.observableArrayList();
 
@@ -142,9 +143,7 @@ public class ProductController {
 			quantityLabel.setText(Integer.toString(product.getQuantity()));
 			quantitySellLabel.setText(Integer.toString(product.getQuantitySell()));
 			valuelLabel.setText(Float.toString(product.getValue()));
-
-			// TODO: We need a way to convert the birthday into a String!
-			// birthdayLabel.setText(...);
+			dateLabel.setText(DateUtil.format(product.getDate()));
 		} else {
 			// Person is null, remove all the text.
 			nameLabel.setText("");
@@ -152,7 +151,7 @@ public class ProductController {
 			quantityLabel.setText("");
 			quantitySellLabel.setText("");
 			valuelLabel.setText("");
-			// dateLabel.setText("");
+			dateLabel.setText("");
 		}
 	}
 

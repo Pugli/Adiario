@@ -5,10 +5,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-
-
-
+import controller.dao.DaoProduct;
 import controller.model.*;
+import controller.util.DateUtil;
 
 /**
  * Dialog to edit details of a person.
@@ -27,13 +26,15 @@ public class ProductEditDialogController {
     private TextField valueField;
    // @FXML
    // private TextField cityField;
-  //  @FXML
-   // private TextField birthdayField;
+    @FXML
+    private TextField dateField;
 
 
     private Stage dialogStage;
     private Product product;
     private boolean okClicked = false;
+    
+    private DaoProduct DAOproduct;
 
     /**
      * Initializes the controller class. This method is automatically called
@@ -65,8 +66,8 @@ public class ProductEditDialogController {
         quantityField.setText(Integer.toString(product.getQuantity()));
         valueField.setText(Float.toString(product.getValue()));
        // cityField.setText(person.getCity());
-       // birthdayField.setText(DateUtil.format(person.getBirthday()));
-       // birthdayField.setPromptText("dd.mm.yyyy");
+        dateField.setText(DateUtil.format(product.getDate()));
+        dateField.setPromptText("dd.mm.yyyy");
     }
 
     /**
@@ -89,10 +90,15 @@ public class ProductEditDialogController {
             product.setQuantity(Integer.parseInt(quantityField.getText()));
             product.setvalue(Float.parseFloat(valueField.getText()));
             product.setQuantitySell(0);
-
+            product.setDate(DateUtil.parse(dateField.getText()));
+            this.save();
             okClicked = true;
             dialogStage.close();
         }
+    }
+    
+    private void save() {
+    	this.DAOproduct.insertar(product);
     }
 
     /**
@@ -120,12 +126,34 @@ public class ProductEditDialogController {
         if (quantityField.getText() == null || quantityField.getText().length() == 0) {
             errorMessage += "No valid street!\n"; 
         }
+        else {
+            // try to parse the postal code into an int.
+            try {
+                Integer.parseInt(quantityField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "No valid quantity (must be an integer)!\n"; 
+            }
+        }
 
         if (valueField.getText() == null || valueField.getText().length() == 0) {
             errorMessage += "No valid postal code!\n"; 
         } 
+        else {
+            // try to parse the postal code into an int.
+            try {
+                Integer.parseInt(valueField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "No valid value (must be an float)!\n"; 
+            }
+        }
 
-       
+        if (dateField.getText() == null || dateField.getText().length() == 0) {
+            errorMessage += "No valid date!\n";
+        } else {
+            if (!DateUtil.validDate(dateField.getText())) {
+                errorMessage += "No valid birthday. Use the format dd.mm.yyyy!\n";
+            }
+        }
         if (errorMessage.length() == 0) {
             return true;
         } else {
