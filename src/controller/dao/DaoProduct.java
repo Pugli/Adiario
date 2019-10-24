@@ -63,7 +63,7 @@ public class DaoProduct {
     public Product getXId(int id){
         Product n = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoADiario?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
             String sql;
             sql = "Select * from product where id_product=\""+id+"\";";
@@ -84,17 +84,51 @@ public class DaoProduct {
     
     public void udapte(Product product){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoADiario?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
             String sql;
-            sql = "UPDATE product\n" +
-                    "SET product_name = \" "+product.getName()+ 
-                    "SET quantity = \" "+product.getQuantity()+
-                    "SET quantity_sell = \" "+product.getQuantitySell()+
-                    "SET product_value = \" "+product.getValue()+ 
-                    "SET category = \" "+product.getCategory()+
-                    "SET product_date = \" "+product.getDate()+
-                    "\"WHERE id_producto = \""+product.getid()+" \"; " ;
+            sql = "UPDATE product SET product_name = \" "+product.getName()+" \" , quantity =  "+product.getQuantity()+ "  , quantity_sell =  "+product.getQuantitySell()+ "  , product_value =  "+(float)product.getValue()+ "  "+ 
+                    ", category = \" "+product.getCategory()+" \" "+ 
+                    ", product_date = \" "+product.getDate()+" \" "+ 
+                    "WHERE id_product = "+product.getid()+" ; " ;
+            sentencia = conexion.createStatement();
+            sentencia.execute(sql);
+
+        } catch (SQLException se) {
+            System.out.println("error sql");
+            se.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("error classforname");
+            e.printStackTrace();
+        }
+    }
+    
+    public void delete(int id){
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoADiario?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+            String sql;
+            sql = "delete from product where id_product="+id+";";
+            sentencia = conexion.createStatement();
+            sentencia.execute(sql);
+    }
+    catch (SQLException se) {
+        System.out.println("error sql");
+        se.printStackTrace();
+    } catch (Exception e) {
+        System.out.println("error classforname");
+        e.printStackTrace();
+    }
+    }
+    
+    public void udapteQuantity(Product product){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ProyectoADiario?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+            String sql;
+            sql = "UPDATE product \n" +
+                    "SET quantity =  "+product.getQuantity()+ " , quantity_sell= "+ product.getQuantitySell()+" WHERE id_product = "+product.getid()+" ; " ;
             sentencia = conexion.createStatement();
             sentencia.execute(sql);
 

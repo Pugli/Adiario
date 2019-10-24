@@ -1,13 +1,21 @@
 package controller.view;
 
 
+import java.util.Date;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import controller.dao.DaoProduct;
+import controller.dao.DaoSell;
 import controller.model.Product;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import controller.util.DateUtil;
 
 public class ProductSellDialogController {
 	@FXML
@@ -17,6 +25,8 @@ public class ProductSellDialogController {
     private Product product;
     private boolean okClicked = false;
     
+    private DaoProduct DAOproduct = new DaoProduct();
+    private DaoSell DAOsell = new DaoSell();
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
@@ -43,14 +53,41 @@ public class ProductSellDialogController {
         if (isInputValid()) { 
             product.setQuantitySell(Integer.parseInt(sellField.getText()));
             product.setQuantity(product.getQuantity());
-            
+            this.save(Integer.parseInt(sellField.getText()));
             okClicked = true;
             dialogStage.close();
         }
     }
     
     
-    
+    private void save(int quantity_sell) {
+    	DAOproduct.udapteQuantity(this.product);
+    	DAOsell.insert(this.product,today(),quantity_sell);
+    	
+    }
+    private LocalDate today() {
+    	Calendar fecha = new GregorianCalendar();
+    	Integer año = fecha.get(Calendar.YEAR);
+    	Integer mes = fecha.get(Calendar.MONTH) + 1;
+    	Integer dia = fecha.get(Calendar.DAY_OF_MONTH);
+        
+       /* String sAño = año.toString();
+        String sMes = mes.toString();
+        String sDia = dia.toString();
+        
+        String sFecha = sDia+"."+sMes+"."+sAño;
+        System.out.println(sFecha);*/
+        //Date date = fecha.getTime();
+       
+       
+        
+        /*String c = fecha.toString();
+        System.out.println(c);
+        LocalDate dateToday = DateUtil.parse(c);*/
+        LocalDate dateToday =  LocalDate.of(año, mes, dia);
+        
+        return dateToday;
+    }
     /**
      * Returns true if the user clicked OK, false otherwise.
      * 

@@ -101,7 +101,9 @@ public class ProductEditDialogController {
     	if(this.DAOproduct.getXId(this.id)==null) {
     		this.DAOproduct.insert(product);
     	}
-    	this.DAOproduct.insert(product);
+    	else {
+    	this.DAOproduct.udapte(product);
+    	}
     }
 
     /**
@@ -144,7 +146,8 @@ public class ProductEditDialogController {
         else {
             // try to parse the postal code into an int.
             try {
-                Integer.parseInt(valueField.getText());
+               // Integer.parseInt(valueField.getText());
+                Float.parseFloat(valueField.getText());
             } catch (NumberFormatException e) {
                 errorMessage += "No valid value (must be an float)!\n"; 
             }
@@ -164,7 +167,7 @@ public class ProductEditDialogController {
         	Alert alert = new Alert(AlertType.WARNING);
         	alert.setTitle("Sin seleccion");
         	alert.setHeaderText(null);
-        	alert.setContentText("invalid");
+        	alert.setContentText(errorMessage);
         	alert.showAndWait();
             return false;
         }

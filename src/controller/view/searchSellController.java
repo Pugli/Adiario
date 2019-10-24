@@ -7,11 +7,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-public class searchSellController {
+public class SearchSellController {
 	@FXML
-    private TextField dateField1;
+    private TextField dayField1;
 	@FXML
-    private TextField dateField2;
+    private TextField monthField1;
+	@FXML
+    private TextField yearField1;
+	@FXML
+    private TextField dayField2;
+	@FXML
+    private TextField monthField2;
+	@FXML
+    private TextField yearField2;
 
 	private Stage dialogStage;
     private Product product;
@@ -39,7 +47,7 @@ public class searchSellController {
     }
     
     @FXML
-   /* private void handleOk() {
+    private void handleOk() {
         if (isInputValid()) { 
             product.setQuantitySell(Integer.parseInt(sellField.getText()));
             product.setQuantity(product.getQuantity());
@@ -47,7 +55,7 @@ public class searchSellController {
             okClicked = true;
             dialogStage.close();
         }
-    }*/
+    }
     
     
     
@@ -73,12 +81,20 @@ public class searchSellController {
      * 
      * @return true if the input is valid
      */
-   /* private boolean isInputValid() {
-        String errorMessage = "";
+    private boolean isInputValid() {
+       String errorMessage = "";
 
-        if (sellField.getText() == null || sellField.getText().length() == 0) {
-            errorMessage += "No valid name!\n"; 
-        }
+       if (dayField1.getText() == null || dayField1.getText().length() == 0) {
+           errorMessage += "No valid street!\n"; 
+       }
+       else {
+           // try to parse the postal code into an int.
+           try {
+               Integer.parseInt(dayField1.getText());
+           } catch (NumberFormatException e) {
+               errorMessage += "No valid quantity (must be an integer)!\n"; 
+           }
+       }
         if (errorMessage.length() == 0) {
             return true;
         } else {
@@ -90,5 +106,5 @@ public class searchSellController {
         	alert.showAndWait();
             return false;
         }
-    }*/
+    }
 }

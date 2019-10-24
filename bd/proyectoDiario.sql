@@ -22,6 +22,6 @@ create table sell(
     foreign key(fk_product) references product(id_product)
 );
 
-
+alter table quantity_sell 
 
 

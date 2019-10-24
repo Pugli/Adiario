@@ -175,7 +175,10 @@ public class ProductController {
 	private void handleDeleteProduct() {
 		int selectedIndex = productTable.getSelectionModel().getSelectedIndex();
 		if (selectedIndex >= 0) {
+			
+			DAOproduct.delete(productTable.getItems().get(selectedIndex).getid());
 			productTable.getItems().remove(selectedIndex);
+			
 		} else {
 			// Nothing selected.
 			Alert alert = new Alert(AlertType.WARNING);
@@ -246,4 +249,26 @@ public class ProductController {
 			alert.showAndWait();
 		}
 	}
+	
+	@FXML
+	private void searchSell() {
+		Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
+		if (selectedProduct != null) {
+			boolean okClicked = mainApp.showSearchSellDialog(selectedProduct);
+			if (okClicked) {
+				showProductDetails(selectedProduct);
+			}
+
+		} else {
+			// Nothing selected.
+			// Nothing selected.
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Sin seleccion");
+			alert.setHeaderText(null);
+			alert.setContentText("invalid");
+			alert.showAndWait();
+		}
+	}
+	
+	
 }

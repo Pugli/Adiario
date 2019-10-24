@@ -50,7 +50,7 @@
                      </children>
                   </GridPane>
                   <TextField fx:id="filterField" layoutX="84.0" layoutY="82.0" onKeyPressed="#filterAndSorting" />
-                  <Button layoutX="22.0" layoutY="18.0" minWidth="48.0" mnemonicParsing="false" text="Ventas" textAlignment="CENTER" AnchorPane.rightAnchor="161.0" AnchorPane.topAnchor="14.0" />
+                  <Button layoutX="22.0" layoutY="18.0" minWidth="48.0" mnemonicParsing="false" onAction="#searchSell" text="Ventas" textAlignment="CENTER" AnchorPane.rightAnchor="161.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
         </items>

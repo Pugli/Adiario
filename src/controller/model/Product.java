@@ -172,5 +172,14 @@ public class Product {
 	public ObjectProperty<LocalDate> dateProperty() {
 		return date;
 	}
+	
+	public Date getTypeDate() {
+		Date date1 = (Date) Date.from(this.date.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
+		java.sql.Date sqlStartDate = new java.sql.Date(date1.getTime());
+		
+		//Date date = new java.sql.Date(this.date.get());
+		return sqlStartDate;
+
+	}
 
 }

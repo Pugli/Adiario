@@ -5,13 +5,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="133.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+<AnchorPane prefHeight="133.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.view.SearchSellController">
    <children>
       <Label layoutX="79.0" layoutY="14.0" text="Escriba un rango de fechas" AnchorPane.leftAnchor="79.0" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="14.0" />
-      <TextField layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="113.0" />
-      <TextField layoutX="173.0" layoutY="50.0" prefHeight="25.0" prefWidth="113.0" />
+      <TextField layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="24.0" AnchorPane.topAnchor="50.0" />
+      <TextField layoutX="248.0" layoutY="50.0" prefHeight="25.0" prefWidth="38.0" />
       <Label layoutX="136.0" layoutY="54.0" text="-----" />
       <Button layoutX="230.0" layoutY="94.0" mnemonicParsing="false" text="Buscar" />
+      <TextField layoutX="55.0" layoutY="50.0" prefHeight="25.0" prefWidth="24.0" />
+      <TextField layoutX="90.0" layoutY="50.0" prefHeight="25.0" prefWidth="38.0" />
+      <TextField layoutX="209.0" layoutY="50.0" prefHeight="25.0" prefWidth="24.0" />
+      <TextField layoutX="174.0" layoutY="50.0" prefHeight="25.0" prefWidth="24.0" />
    </children>
 </AnchorPane>
