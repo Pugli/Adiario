@@ -1,13 +1,25 @@
 package controller.view;
 
-import controller.model.Product;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import controller.dao.DaoSell;
+import controller.model.Sell;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+/**
+ * Class for search all sell between determinate dates.
+ * @author Pugliese, Agustin Gonzalo
+ *
+ */
 
-public class SearchSellController {
+public class SearchSellController extends ProductController {
 	@FXML
     private TextField dayField1;
 	@FXML
@@ -20,17 +32,27 @@ public class SearchSellController {
     private TextField monthField2;
 	@FXML
     private TextField yearField2;
-
+	@FXML
+	private TableView<Sell> sellTable;
+	@FXML
+	private TableColumn<Sell, String> nameColumn;
+	@FXML
+	private TableColumn<Sell, LocalDate> dateColumn;
+	@FXML
+	private TableColumn<Sell, String> quantityColumn;
+	@FXML
+	private TableColumn<Sell, String> valueColumn;
 	private Stage dialogStage;
-    private Product product;
     private boolean okClicked = false;
-    
+    private ObservableList<Sell> masterData = FXCollections.observableArrayList();
+    private DaoSell daoSell;
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
     @FXML
     private void initialize() {
+    	this.daoSell = new DaoSell();
     }
     
     /**
@@ -41,22 +63,38 @@ public class SearchSellController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-    
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-    
+	/**
+	 * Called when the user clicks ok. transform numbers to dates and search in databases elements.
+	 */
     @FXML
     private void handleOk() {
         if (isInputValid()) { 
-            product.setQuantitySell(Integer.parseInt(sellField.getText()));
-            product.setQuantity(product.getQuantity());
-            
-            okClicked = true;
-            dialogStage.close();
+        	Integer day1=Integer.parseInt(dayField1.getText());
+        	Integer month1=Integer.parseInt(monthField1.getText());
+        	Integer year1=Integer.parseInt(yearField1.getText());
+        	LocalDate dateToday =  LocalDate.of(year1, month1, day1);
+        	Integer day2=Integer.parseInt(dayField2.getText());
+        	Integer month2=Integer.parseInt(monthField2.getText());
+        	Integer year2=Integer.parseInt(yearField2.getText());
+        	LocalDate dateToday2 =  LocalDate.of(year2, month2, day2);
+        	ArrayList<Sell> arraySell;
+        	try {
+        	arraySell=daoSell.search(dateToday, dateToday2);
+        	for (Sell n: arraySell) {
+        		masterData.add(n);
+           }
+        	}
+        	catch(Exception e) {
+        		this.warning("Ocurrio un problema con la base de datos. SearchSellController");
+        	}
+        	sellTable.getItems().clear();
+        	sellTable.setItems(masterData);
+        	nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        	dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+        	quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantitySellProperty());
+        	valueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
         }
     }
-    
     
     
     /**
@@ -67,44 +105,117 @@ public class SearchSellController {
     public boolean isOkClicked() {
         return okClicked;
     }
-    
-    /**
-     * Called when the user clicks cancel.
-     */
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    /**
-     * Validates the user input in the text fields.
-     * 
-     * @return true if the input is valid
-     */
-    private boolean isInputValid() {
-       String errorMessage = "";
 
-       if (dayField1.getText() == null || dayField1.getText().length() == 0) {
-           errorMessage += "No valid street!\n"; 
-       }
-       else {
-           // try to parse the postal code into an int.
-           try {
-               Integer.parseInt(dayField1.getText());
-           } catch (NumberFormatException e) {
-               errorMessage += "No valid quantity (must be an integer)!\n"; 
-           }
-       }
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-        	// Nothing selected.
-        	Alert alert = new Alert(AlertType.WARNING);
-        	alert.setTitle("Sin seleccion");
-        	alert.setHeaderText(null);
-        	alert.setContentText("invalid field");
-        	alert.showAndWait();
-            return false;
-        }
-    }
+	/**
+	 * Validates the user input in the text fields.
+	 * 
+	 * @return true if the input is valid
+	 */
+	private boolean isInputValid() {
+		String errorMessage = "";
+
+		if (dayField1.getText() == null || dayField1.getText().length() == 0) {
+			errorMessage += "Dia no valido!\n";
+		} else {
+			// try to parse the day into an int.
+			try {
+				int day1 = Integer.parseInt(dayField1.getText());
+				if (day1 < 1 || day1 > 31) {
+					errorMessage += "Dia no valido!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (dayField2.getText() == null || dayField2.getText().length() == 0) {
+			errorMessage += "Dia no valido!\n";
+		} else {
+			// try to parse the day into an int.
+			try {
+				int day1 = Integer.parseInt(dayField2.getText());
+				if (day1 < 1 || day1 > 31) {
+					errorMessage += "Dia no valido!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (monthField1.getText() == null || monthField1.getText().length() == 0) {
+			errorMessage += "mes no valido!\n";
+		} else {
+			// try to parse month into an int.
+			try {
+				int day1 = Integer.parseInt(monthField1.getText());
+				if (day1 < 1 || day1 > 12) {
+					errorMessage += "mes no valido!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (monthField2.getText() == null || monthField2.getText().length() == 0) {
+			errorMessage += "mes no valido!\n";
+		} else {
+			// try to parse month into an int.
+			try {
+				int day1 = Integer.parseInt(monthField2.getText());
+				if (day1 < 1 || day1 > 12) {
+					errorMessage += "mes no valido!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (yearField1.getText() == null || yearField1.getText().length() == 0) {
+			errorMessage += "Fecha no valida!\n";
+		} else {
+			// try to parse year into an int.
+			try {
+				int day1 = Integer.parseInt(yearField1.getText());
+				if (day1 < 2000 || day1 > 2050) {
+					errorMessage += "Fecha no valida!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (yearField2.getText() == null || yearField2.getText().length() == 0) {
+			errorMessage += "Fecha no valida!\n";
+		} else {
+			// try to parse year into an int.
+			try {
+				int day1 = Integer.parseInt(yearField2.getText());
+				if (day1 < 2000 || day1 > 2050) {
+					errorMessage += "Fecha no valida!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Debe ingresar un caracter numerico!\n";
+			}
+		}
+
+		if (errorMessage.length() == 0) {
+			return true;
+		} else {
+			// Nothing selected.
+			this.warning(errorMessage);
+			return false;
+		}
+	}
+    /**
+	 * warning functions for alert an error
+	 * 
+	 * @param message
+	 */
+	private void warning(String message) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Hubo un problema");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 }

@@ -1,27 +1,24 @@
 package controller.model;
 
-//import java.time.LocalDate;
-
 import javafx.beans.property.IntegerProperty;
-import controller.util.DateUtil;
 import javafx.beans.property.ObjectProperty;
-//import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-//import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
-import controller.util.DateUtil;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
 
+/**
+ * Model of product
+ * 
+ * @author Pugliese, Agustin Gonzalo
+ *
+ */
 public class Product {
-
 	private final IntegerProperty id;
 	private final StringProperty name;
 	private final IntegerProperty quantity;
@@ -30,6 +27,9 @@ public class Product {
 	private final StringProperty category;
 	private final ObjectProperty<LocalDate> date;
 
+	/**
+	 * Contructor without parameters
+	 */
 	public Product() {
 		this.id = new SimpleIntegerProperty(0);
 		this.name = new SimpleStringProperty(null);
@@ -40,16 +40,25 @@ public class Product {
 		this.date = new SimpleObjectProperty<LocalDate>(LocalDate.of(2019, 1, 1));
 	}
 
-	public Product(int id, String name, int quantity, int quantitySell, Float value, String category,Date date) {
+	/**
+	 * General constructor whit all parameters
+	 * 
+	 * @param id
+	 * @param name
+	 * @param quantity
+	 * @param quantitySell
+	 * @param value
+	 * @param category
+	 * @param date
+	 */
+	public Product(int id, String name, int quantity, int quantitySell, Float value, String category, Date date) {
 		this.id = new SimpleIntegerProperty(id);
 		this.name = new SimpleStringProperty(name);
 		this.quantity = new SimpleIntegerProperty(quantity);
 		this.quantitySell = new SimpleIntegerProperty(quantitySell);
 		this.value = new SimpleFloatProperty(value);
 		this.category = new SimpleStringProperty(category);
-		
 		this.date = new SimpleObjectProperty<LocalDate>(date.toLocalDate());
-		//date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
 	}
 
 	/**
@@ -172,14 +181,11 @@ public class Product {
 	public ObjectProperty<LocalDate> dateProperty() {
 		return date;
 	}
-	
+
 	public Date getTypeDate() {
 		Date date1 = (Date) Date.from(this.date.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
 		java.sql.Date sqlStartDate = new java.sql.Date(date1.getTime());
-		
-		//Date date = new java.sql.Date(this.date.get());
 		return sqlStartDate;
-
 	}
 
 }

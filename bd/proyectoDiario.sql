@@ -24,4 +24,7 @@ create table sell(
 
 alter table quantity_sell 
 
+select p.product_name,p.category,p.product_date,s.id_sell,s.fk_product,s.sell_date,s.sell_value,s.quantity_sell from product as p inner join sell as s ON p.id_product=s.fk_product"+
+            		"where s.sell_date BETWEEN "2019-10-24" AND "2019-10-24";
+
 

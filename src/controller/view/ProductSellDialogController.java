@@ -1,12 +1,10 @@
 package controller.view;
 
 
-import java.util.Date;
 
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import controller.dao.DaoProduct;
 import controller.dao.DaoSell;
 import controller.model.Product;
@@ -15,24 +13,34 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import controller.util.DateUtil;
 
+/**
+ * Class with dialog for sell products.
+ * 
+ * @author Pugliese, Agustin Gonzalo
+ *
+ */
 public class ProductSellDialogController {
 	@FXML
     private TextField sellField;
-	
 	private Stage dialogStage;
     private Product product;
     private boolean okClicked = false;
-    
-    private DaoProduct DAOproduct = new DaoProduct();
-    private DaoSell DAOsell = new DaoSell();
+    private DaoProduct DAOproduct;
+    private DaoSell DAOsell;
     /**
      * Initializes the controller class. This method is automatically called
      * after the fxml file has been loaded.
      */
     @FXML
     private void initialize() {
+    	try {
+    	this.DAOproduct = new DaoProduct();
+        this.DAOsell = new DaoSell();
+    	}
+    	catch(Exception e){
+    		this.warning("No se pudo inicializar la ventana");
+    	}
     }
     
     /**
@@ -43,11 +51,16 @@ public class ProductSellDialogController {
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
-    
+    /**
+     * set product
+     * @param product
+     */
     public void setProduct(Product product) {
         this.product = product;
     }
-    
+    /**
+     * button OK or "aceptar".
+     */
     @FXML
     private void handleOk() {
         if (isInputValid()) { 
@@ -58,34 +71,30 @@ public class ProductSellDialogController {
             dialogStage.close();
         }
     }
-    
+    /**
+     * Connection with database for save the quantity sell.
+     * @param quantity_sell
+     */
     
     private void save(int quantity_sell) {
+    	try {
     	DAOproduct.udapteQuantity(this.product);
     	DAOsell.insert(this.product,today(),quantity_sell);
-    	
+    	}
+    	catch(Exception e){
+    		this.warning("Hubo un error con la base de datos. ProductSellDialogController");
+    	}
     }
+    /**
+     * get today's date
+     * @return dateToday
+     */
     private LocalDate today() {
     	Calendar fecha = new GregorianCalendar();
     	Integer año = fecha.get(Calendar.YEAR);
     	Integer mes = fecha.get(Calendar.MONTH) + 1;
     	Integer dia = fecha.get(Calendar.DAY_OF_MONTH);
-        
-       /* String sAño = año.toString();
-        String sMes = mes.toString();
-        String sDia = dia.toString();
-        
-        String sFecha = sDia+"."+sMes+"."+sAño;
-        System.out.println(sFecha);*/
-        //Date date = fecha.getTime();
-       
-       
-        
-        /*String c = fecha.toString();
-        System.out.println(c);
-        LocalDate dateToday = DateUtil.parse(c);*/
         LocalDate dateToday =  LocalDate.of(año, mes, dia);
-        
         return dateToday;
     }
     /**
@@ -114,18 +123,41 @@ public class ProductSellDialogController {
         String errorMessage = "";
 
         if (sellField.getText() == null || sellField.getText().length() == 0) {
-            errorMessage += "No valid name!\n"; 
+            errorMessage += "Numero no valido!\n"; 
         }
+        else {
+			// try to parse sellField code into an int.
+			try {
+				int number = Integer.parseInt(sellField.getText());
+				if(product.getQuantity()<number){
+					errorMessage += "Se excedio de la cantidad de productos disponibles!\n";
+				}
+				if (number < 0) {
+					errorMessage += "Cantidad no puede ser un numero negativo!\n";
+				}
+			} catch (NumberFormatException e) {
+				errorMessage += "Se ingreso un valor incorrecto!\n";
+			}
+		}
         if (errorMessage.length() == 0) {
             return true;
         } else {
         	// Nothing selected.
-        	Alert alert = new Alert(AlertType.WARNING);
-        	alert.setTitle("Sin seleccion");
-        	alert.setHeaderText(null);
-        	alert.setContentText("invalid field");
-        	alert.showAndWait();
+        	this.warning(errorMessage);
             return false;
         }
     }
+
+	/**
+	 * warning functions for alert an error
+	 * 
+	 * @param message
+	 */
+	private void warning(String message) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Hubo un problema");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
 }

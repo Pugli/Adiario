@@ -5,23 +5,23 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-//import org.controlsfx.dialog.Dialogs;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
 import java.util.ArrayList;
-
 import controller.MainApp;
 import controller.dao.DaoProduct;
 import controller.model.Product;
 import controller.util.DateUtil;
+
+/**
+ * Interface with table and information about product. button for all actions.
+ * 
+ * @author Pugliese, Agustin Gonzalo
+ */
 
 public class ProductController {
 	@FXML
@@ -30,10 +30,8 @@ public class ProductController {
 	private TableColumn<Product, String> nameColumn;
 	@FXML
 	private TableColumn<Product, String> categoryColumn;
-
 	@FXML
 	private TextField filterField;
-
 	@FXML
 	private Label nameLabel;
 	@FXML
@@ -44,21 +42,18 @@ public class ProductController {
 	private Label quantitySellLabel;
 	@FXML
 	private Label valuelLabel;
-	 @FXML
-     private Label dateLabel;
-
+	@FXML
+	private Label dateLabel;
 	private ObservableList<Product> masterData = FXCollections.observableArrayList();
-
 	// Reference to the main application.
 	private MainApp mainApp;
-	
 	private DaoProduct DAOproduct;
 
 	/**
 	 * The constructor. The constructor is called before the initialize() method.
 	 */
 	public ProductController() {
-		this.DAOproduct= new DaoProduct();
+		this.DAOproduct = new DaoProduct();
 	}
 
 	/**
@@ -67,18 +62,20 @@ public class ProductController {
 	 */
 	@FXML
 	private void initialize() {
-		// Initialize the person table with the two columns.
+		// Initialize the product table with the two columns.
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
-
 		// clear product details
 		showProductDetails(null);
-
 		productTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> showProductDetails(newValue));
-
 	}
 
+	/**
+	 * filter table for search specify element
+	 * 
+	 * @param event
+	 */
 	@FXML
 	private void filterAndSorting(KeyEvent event) {
 		String filterName = this.filterField.getText();
@@ -93,35 +90,6 @@ public class ProductController {
 			}
 			this.productTable.setItems(masterData);
 		}
-
-		/*
-		 * // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-		 * FilteredList<Product> filteredData = new FilteredList<>(masterData, p ->
-		 * true);
-		 * 
-		 * // 2. Set the filter Predicate whenever the filter changes.
-		 * filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-		 * filteredData.setPredicate(product -> { // If filter text is empty, display
-		 * all persons. if (newValue == null || newValue.isEmpty()) { return true; }
-		 * 
-		 * // Compare first name and last name of every person with filter text. String
-		 * lowerCaseFilter = newValue.toLowerCase();
-		 * 
-		 * if (product.getName().toLowerCase().contains(lowerCaseFilter)) { return true;
-		 * // Filter matches first name. } else if
-		 * (product.getCategory().toLowerCase().contains(lowerCaseFilter)) { return
-		 * true; // Filter matches last name. } return false; // Does not match. }); });
-		 * 
-		 * // 3. Wrap the FilteredList in a SortedList. 
-		 * SortedList<Product> sortedData =
-		 * new SortedList<>(filteredData);
-		 * 
-		 * // 4. Bind the SortedList comparator to the TableView comparator.
-		 * sortedData.comparatorProperty().bind(productTable.comparatorProperty());
-		 * 
-		 * // 5. Add sorted (and filtered) data to the table.
-		 * productTable.setItems(sortedData);
-		 */
 	}
 
 	/**
@@ -131,22 +99,25 @@ public class ProductController {
 	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
-	//agregar datos
+		// set data
 		ArrayList<Product> daoProduct;
-		daoProduct=DAOproduct.getAll();
-        for (Product n: daoProduct) {
-             mainApp.getProductData().add(n);
-        }
-
-		// Add observable list data to the table
-		productTable.setItems(mainApp.getProductData());
+		try {
+			daoProduct = DAOproduct.getAll();
+			for (Product n : daoProduct) {
+				mainApp.getProductData().add(n);
+			}
+			// Add observable list data to the table
+			productTable.setItems(mainApp.getProductData());
+		} catch (Exception e) {
+			this.warning("Hubo un error");
+		}
 	}
 
 	/**
-	 * Fills all text fields to show details about the person. If the specified
-	 * person is null, all text fields are cleared.
+	 * Fills all text fields to show details about the product. If the specified
+	 * product is null, all text fields are cleared.
 	 * 
-	 * @param person the person or null
+	 * @param product or null
 	 */
 	private void showProductDetails(Product product) {
 		if (product != null) {
@@ -175,23 +146,18 @@ public class ProductController {
 	private void handleDeleteProduct() {
 		int selectedIndex = productTable.getSelectionModel().getSelectedIndex();
 		if (selectedIndex >= 0) {
-			
 			DAOproduct.delete(productTable.getItems().get(selectedIndex).getid());
 			productTable.getItems().remove(selectedIndex);
-			
+
 		} else {
 			// Nothing selected.
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Sin seleccion");
-			alert.setHeaderText(null);
-			alert.setContentText("Por favor, seleccione un producto de la tabla");
-			alert.showAndWait();
+			this.warning("Por favor, seleccione un producto de la tabla");
 		}
 	}
 
 	/**
 	 * Called when the user clicks the new button. Opens a dialog to edit details
-	 * for a new person.
+	 * for a new product.
 	 */
 	@FXML
 	private void handleNewProduct() {
@@ -204,7 +170,7 @@ public class ProductController {
 
 	/**
 	 * Called when the user clicks the edit button. Opens a dialog to edit details
-	 * for the selected person.
+	 * for the selected product.
 	 */
 	@FXML
 	private void handleEditPerson() {
@@ -214,21 +180,14 @@ public class ProductController {
 			if (okClicked) {
 				showProductDetails(selectedProduct);
 			}
-
 		} else {
 			// Nothing selected.
-			// Nothing selected.
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Sin seleccion");
-			alert.setHeaderText(null);
-			alert.setContentText("Por favor, seleccione un producto de la tabla");
-			alert.showAndWait();
+			this.warning("Por favor, seleccione un producto de la tabla");
 		}
 	}
 
 	/**
 	 * sell of product
-	 * 
 	 */
 	@FXML
 	private void sell() {
@@ -241,34 +200,29 @@ public class ProductController {
 
 		} else {
 			// Nothing selected.
-			// Nothing selected.
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Sin seleccion");
-			alert.setHeaderText(null);
-			alert.setContentText("invalid");
-			alert.showAndWait();
+			this.warning("Por favor, seleccione un producto de la tabla");
 		}
 	}
-	
+
+	/*
+	 * Function for search sells between determinate dates.
+	 */
 	@FXML
 	private void searchSell() {
-		Product selectedProduct = productTable.getSelectionModel().getSelectedItem();
-		if (selectedProduct != null) {
-			boolean okClicked = mainApp.showSearchSellDialog(selectedProduct);
-			if (okClicked) {
-				showProductDetails(selectedProduct);
-			}
-
-		} else {
-			// Nothing selected.
-			// Nothing selected.
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Sin seleccion");
-			alert.setHeaderText(null);
-			alert.setContentText("invalid");
-			alert.showAndWait();
-		}
+		mainApp.showSearchSellDialog();
 	}
-	
-	
+
+	/**
+	 * warning functions for alert an error
+	 * 
+	 * @param message
+	 */
+	private void warning(String message) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Hubo un problema");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
+
 }
