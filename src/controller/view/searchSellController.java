@@ -69,6 +69,7 @@ public class SearchSellController extends ProductController {
     @FXML
     private void handleOk() {
         if (isInputValid()) { 
+        	sellTable.getItems().clear();
         	Integer day1=Integer.parseInt(dayField1.getText());
         	Integer month1=Integer.parseInt(monthField1.getText());
         	Integer year1=Integer.parseInt(yearField1.getText());
@@ -87,7 +88,7 @@ public class SearchSellController extends ProductController {
         	catch(Exception e) {
         		this.warning("Ocurrio un problema con la base de datos. SearchSellController");
         	}
-        	sellTable.getItems().clear();
+        	
         	sellTable.setItems(masterData);
         	nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         	dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());

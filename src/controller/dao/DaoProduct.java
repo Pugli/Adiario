@@ -43,6 +43,7 @@ public class DaoProduct {
 			sentencia.execute("INSERT INTO product (product_name,quantity,product_value,category,product_date) "
 					+ "VALUES (\"" + n.getName() + "\",\"" + n.getQuantity() + "\",\"" + n.getValue() + "\",\""
 					+ n.getCategory() + "\",\"" + n.getDate() + "\");");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

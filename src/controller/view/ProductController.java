@@ -105,6 +105,7 @@ public class ProductController {
 			daoProduct = DAOproduct.getAll();
 			for (Product n : daoProduct) {
 				mainApp.getProductData().add(n);
+				
 			}
 			// Add observable list data to the table
 			productTable.setItems(mainApp.getProductData());
@@ -164,7 +165,22 @@ public class ProductController {
 		Product tempProduct = new Product();
 		boolean okClicked = mainApp.showProductEditDialog(tempProduct);
 		if (okClicked) {
-			mainApp.getProductData().add(tempProduct);
+			productTable.getItems().clear();
+			mainApp.getProductData().removeAll();
+			ArrayList<Product> daoProduct;
+			try {
+				daoProduct = DAOproduct.getAll();
+				for (Product n : daoProduct) {
+					mainApp.getProductData().add(n);
+				}
+				// Add observable list data to the table
+				
+				
+				productTable.setItems(mainApp.getProductData());
+			} catch (Exception e) {
+				this.warning("Hubo un error");
+			}
+			
 		}
 	}
 
